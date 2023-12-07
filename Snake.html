@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Jogo da Cobra</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #telaJogo {
+            background-color: #000;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="telaJogo" width="400" height="400"></canvas>
+
+    <script>
+        var tela = document.getElementById('telaJogo');
+        var ctx = tela.getContext('2d');
+        var tamanho = 20;
+        var cobra = [{x: 160, y: 200}, {x: 140, y: 200}, {x: 120, y: 200}];
+        var dx = tamanho;
+        var dy = 0;
+        var posicaoMacaX;
+        var posicaoMacaY;
+
+        function criarMaca() {
+            posicaoMacaX = Math.floor(Math.random() * (tela.width / tamanho)) * tamanho;
+            posicaoMacaY = Math.floor(Math.random() * (tela.height / tamanho)) * tamanho;
+        }
+
+        function desenharMaca() {
+            ctx.fillStyle = 'red';
+            ctx.fillRect(posicaoMacaX, posicaoMacaY, tamanho, tamanho);
+        }
+
+        function desenharCobra() {
+            ctx.fillStyle = 'green';
+            cobra.forEach(function(parteCobra) {
+                ctx.fillRect(parteCobra.x, parteCobra.y, tamanho, tamanho);
+            });
+        }
+
+        function moverCobra() {
+            const cabeca = {x: cobra[0].x + dx, y: cobra[0].y + dy};
+            cobra.unshift(cabeca);
+
+            const comeuMaca = cobra[0].x === posicaoMacaX && cobra[0].y === posicaoMacaY;
+            if (comeuMaca) {
+                criarMaca();
+            } else {
+                cobra.pop();
+            }
+        }
+
+        function mudarDirecao(evento) {
+            const TECLA_ESQUERDA = 37;
+            const TECLA_DIREITA = 39;
+            const TECLA_CIMA = 38;
+            const TECLA_BAIXO = 40;
+            const teclaPressionada = evento.keyCode;
+            const indoParaCima = dy === -tamanho;
+            const indoParaBaixo = dy === tamanho;
+            const indoParaDireita = dx === tamanho;
+            const indoParaEsquerda = dx === -tamanho;
+
+            if (teclaPressionada === TECLA_ESQUERDA && !indoParaDireita) {
+                dx = -tamanho;
+                dy = 0;
+            }
+
+            if (teclaPressionada === TECLA_CIMA && !indoParaBaixo) {
+                dx = 0;
+                dy = -tamanho;
+            }
+
+            if (teclaPressionada === TECLA_DIREITA && !indoParaEsquerda) {
+                dx = tamanho;
+                dy = 0;
+            }
+
+            if (teclaPressionada === TECLA_BAIXO && !indoParaCima) {
+                dx = 0;
+                dy = tamanho;
+            }
+        }
+
+        function atualizar() {
+            ctx.clearRect(0, 0, tela.width, tela.height);
+            desenharMaca();
+            moverCobra();
+            desenharCobra();
+        }
+
+        criarMaca();
+        document.addEventListener("keydown", mudarDirecao);
+        setInterval(atualizar, 100);
+    </script>
+</body>
+</html>
