@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo da Cobra</title>
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background-color: #f0f0f0;
         }
         #telaJogo {
             background-color: #000;
             border: 1px solid black;
         }
+    
     </style>
 </head>
 <body>
-    <canvas id="telaJogo" width="400" height="400"></canvas>
+    <canvas id="telaJogo" width="1024" height="600"></canvas>
 
     <script>
-        var tela = document.getElementById('telaJogo');
-        var ctx = tela.getContext('2d');
-        var tamanho = 20;
-        var cobra = [{x: 160, y: 200}, {x: 140, y: 200}, {x: 120, y: 200}];
-        var dx = tamanho;
-        var dy = 0;
-        var posicaoMacaX;
-        var posicaoMacaY;
+        let tela = document.getElementById('telaJogo');
+        let ctx = tela.getContext('2d');
+        let tamanho = 20;
+        let cobra = [{x: 160, y: 200}, {x: 140, y: 200}, {x: 120, y: 200}];
+        let dx = tamanho;
+        let dy = 0;
+        let posicaoMacaX;
+        let posicaoMacaY;
 
         function criarMaca() {
             posicaoMacaX = Math.floor(Math.random() * (tela.width / tamanho)) * tamanho;
@@ -96,6 +98,8 @@
             moverCobra();
             desenharCobra();
         }
+
+        
 
         criarMaca();
         document.addEventListener("keydown", mudarDirecao);
